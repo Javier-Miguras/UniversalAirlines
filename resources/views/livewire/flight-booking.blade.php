@@ -70,19 +70,28 @@
                             <input type="hidden" name="quantity" value="{{ count($selectedSeats) }}">   
                             <input type="hidden" name="seats" value="{{ json_encode($selectedSeats) }}">   
                             <input type="hidden" name="amount" value="{{ $flight->price * count($selectedSeats) }}">   
-
-                            <button @if(count($selectedSeats) > 0 && auth()->user()->rol != 1 && auth()->user()->email_verified_at != null) type="submit" class="hover:bg-green-700 bg-green-500 shadow-md border border-gray-400 rounded-md text-base py-1 px-2 font-semibold text-white flex items-center gap-1 justify-center mt-6" @else disabled class="hover:bg-gray-100 bg-white shadow-md border border-gray-400 rounded-md text-base py-1 px-2 font-semibold text-gray-600 flex items-center gap-1 justify-center mt-6 pointer-events-none" @endif >
-                                @if(auth()->user()->rol == 1)
-                                    Admins can't buy tickets.
-                                @elseif(auth()->user()->email_verified_at == null)
-                                    Verify account to continue.
-                                @else
+                            
+                            @if (auth()->user() == null)
+                                <button disabled class="hover:bg-gray-100 bg-white shadow-md border border-gray-400 rounded-md text-base py-1 px-2 font-semibold text-gray-600 flex items-center gap-1 justify-center mt-6 pointer-events-none">Register to continue.</button>
+                            @elseif(auth()->user()->email_verified_at == null)
+                                <button disabled class="hover:bg-gray-100 bg-white shadow-md border border-gray-400 rounded-md text-base py-1 px-2 font-semibold text-gray-600 flex items-center gap-1 justify-center mt-6 pointer-events-none">Verify your account to continue.</button>
+                            @elseif(auth()->user()->rol == 1)
+                                <button disabled class="hover:bg-gray-100 bg-white shadow-md border border-gray-400 rounded-md text-base py-1 px-2 font-semibold text-gray-600 flex items-center gap-1 justify-center mt-6 pointer-events-none">Admins can't buy tickets.</button>
+                            @elseif(!(count($selectedSeats) > 0))
+                                <button disabled class="hover:bg-gray-100 bg-white shadow-md border border-gray-400 rounded-md text-base py-1 px-2 font-semibold text-gray-600 flex items-center gap-1 justify-center mt-6 pointer-events-none">
                                     Go to Checkout
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                                     </svg>
-                                @endif
-                            </button>
+                                </button>
+                            @else
+                                <button type="submit" class="hover:bg-green-700 bg-green-500 shadow-md border border-gray-400 rounded-md text-base py-1 px-2 font-semibold text-white flex items-center gap-1 justify-center mt-6">
+                                    Go to Checkout
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                                    </svg>
+                                </button>   
+                            @endif
                         </form>
                     </div>
                 </div>
